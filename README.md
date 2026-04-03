@@ -1,19 +1,52 @@
 # TP Complexite
 
-Projet de TPs de complexite en Python 3.14.
+Projet de TPs de complexité en Python 3.14.
 
-## Prerequis
+Depot GitHub : `https://github.com/LeSurvivant9/tp-complexite`
+
+## Prérequis
 
 - `uv`
-- une installation LaTeX avec `latexmk`, `lualatex`, `chktex` et `latexindent`
+
+La documentation LaTeX est optionnelle pour le développement.
+
+Prérequis supplémentaires pour la documentation :
+
+- `latexmk`
+- `lualatex`
+- `chktex`
+- `latexindent`
+
+## Clonage
+
+```bash
+git clone git@github.com:LeSurvivant9/tp-complexite.git
+cd tp-complexite
+```
 
 ## Installation
+
+Installation minimale pour développer et exécuter le projet :
 
 ```bash
 uv sync
 ```
 
-## Execution
+## Lancement rapide
+
+Exécuter tous les tests :
+
+```bash
+uv run pytest
+```
+
+Vérifier le typage :
+
+```bash
+uv run mypy .
+```
+
+## Exécution
 
 ### TP1
 
@@ -23,7 +56,7 @@ uv run python -m tp1.main --exercise all
 
 ### TP2
 
-Resolution d'une instance :
+Résolution d'une instance :
 
 ```bash
 uv run python -m tp2.main --target 120 --numbers 2 10 100
@@ -49,7 +82,24 @@ Benchmark reproductible :
 uv run python -m tp3.main --benchmark --seed 123
 ```
 
-## Verification
+## Documentation LaTeX
+
+Cette partie est optionnelle pour le développement.
+Elle est utile uniquement si l'on souhaite générer ou vérifier le compte-rendu PDF.
+
+Compilation du compte-rendu :
+
+```bash
+make docs
+```
+
+Vérification complète de la doc :
+
+```bash
+make docs-check
+```
+
+## Vérification
 
 Tests :
 
@@ -61,18 +111,4 @@ Typage statique :
 
 ```bash
 uv run mypy .
-```
-
-## Documentation
-
-Compilation du compte-rendu :
-
-```bash
-make docs
-```
-
-Verification complete de la doc :
-
-```bash
-make docs-check
 ```
