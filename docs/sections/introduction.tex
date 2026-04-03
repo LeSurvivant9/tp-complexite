@@ -1,0 +1,41 @@
+\section{Introduction}\label{sec:introduction}
+
+Ce compte rendu rassemble l'impl\'{e}mentation et l'analyse de trois travaux
+pratiques de complexit\'{e}.
+L'objectif est double : produire des programmes
+corrects et facilement ex\'{e}cutables, puis comparer les comportements mesur\'{e}s
+aux complexit\'{e}s th\'{e}oriques vues en cours.
+
+L'ensemble du projet a \'{e}t\'{e} d\'{e}velopp\'{e} en Python 3.14 avec une
+organisation par sujet : \texttt{tp1/}, \texttt{tp2/} et \texttt{tp3/}.
+Les
+campagnes de mesures reposent sur \texttt{time.perf\_counter\_ns} via le module
+commun \texttt{utils/benchmarking.py}.
+Les figures du rapport sont g\'{e}n\'{e}r\'{e}es
+avec \texttt{matplotlib}, puis int\'{e}gr\'{e}es au document LaTeX.
+
+La d\'{e}marche suivie est la m\^{e}me pour les trois TPs :
+
+\begin{enumerate}
+	\item impl\'{e}menter une version claire et typ\'{e}e de chaque algorithme ;
+	\item valider le comportement avec des tests automatis\'{e}s ;
+	\item mesurer les temps d'ex\'{e}cution sur des entr\'{e}es contr\^{o}l\'{e}es et
+	      reproductibles ;
+	\item comparer les r\'{e}sultats observ\'{e}s aux ordres de grandeur th\'{e}oriques.
+\end{enumerate}
+
+\subsection{Configuration de la machine}\label{subsec:introduction-machine}
+
+Les r\'{e}sultats num\'{e}riques pr\'{e}sent\'{e}s dans ce document ont \'{e}t\'{e}
+obtenus sur la configuration suivante :
+
+\begin{itemize}
+	\item syst\`{e}me : \texttt{Darwin 25.3.0} ;
+	\item processeur : \texttt{Apple M4 Pro} ;
+	\item m\'{e}moire vive : \texttt{24 Go} ;
+	\item version Python : \texttt{3.14.2}.
+\end{itemize}
+
+Cette configuration est importante pour l'interpr\'{e}tation des temps mesur\'{e}s,
+en particulier pour les algorithmes quadratiques et exponentiels dont les co\^{u}ts
+croissent tr\`{e}s rapidement.

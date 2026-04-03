@@ -1,0 +1,172 @@
+\section{TP2 --- Le compte est bon}\label{sec:tp2}
+
+Ce deuxi\`{e}me TP \'{e}tudie un algorithme d'exploration arborescente appliqu\'{e}
+au jeu \og{} Le compte est bon \fg{}. \`{A} partir d'un ensemble de plaques et d'une
+cible \(R\), il faut d\'{e}terminer si une suite d'op\'{e}rations autoris\'{e}es permet
+d'atteindre exactement cette cible.
+
+\subsection{Principe de r\'{e}solution}\label{subsec:tp2-principe}
+
+L'impl\'{e}mentation repose sur une exploration r\'{e}cursive en profondeur.
+
+\begin{enumerate}
+	\item construire tous les couples \((p_i, p_j)\) possibles ;
+	\item appliquer les op\'{e}rations \(+\), \(-\), \(\times\) et \(/\) lorsque
+	      leur r\'{e}sultat reste valide ;
+	\item remplacer les deux plaques consomm\'{e}es par le r\'{e}sultat obtenu ;
+	\item recommencer jusqu'\`{a} trouver la cible ou \'{e}puiser tous les cas.
+\end{enumerate}
+
+Les contraintes du sujet sont respect\'{e}es dans le solveur :
+
+\begin{itemize}
+	\item chaque plaque n'est utilis\'{e}e qu'une seule fois ;
+	\item les soustractions n\'{e}gatives ou nulles sont interdites ;
+	\item les divisions ne sont gard\'{e}es que si le quotient est entier.
+\end{itemize}
+
+En plus du verdict, le programme reconstruit une expression arithm\'{e}tique
+compl\`{e}te lorsqu'une solution existe.
+
+\subsection{Pseudo-code}\label{subsec:tp2-pseudocode}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code de l'exploration du TP2},label={lst:tp2-exploration}]
+explorer(cible, valeurs, expressions) :
+    si cible appartient a valeurs :
+        retourner succes, expression correspondante
+
+    si taille(valeurs) < 2 :
+        retourner echec
+
+    pour chaque paire d'indices (i, j) :
+        reste <- valeurs sans i ni j
+        pour chaque resultat valide de combiner(valeurs[i], valeurs[j]) :
+            nouvel_ensemble <- reste U {resultat}
+            explorer(cible, nouvel_ensemble, expressions mises a jour)
+
+    retourner echec
+\end{lstlisting}
+
+Dans le code :
+
+\begin{itemize}
+	\item \texttt{build\_pairs} construit les couples ;
+	\item \texttt{combine\_pair} et \texttt{\_combine\_entries} g\'{e}n\`{e}rent les
+	      op\'{e}rations valides ;
+	\item \texttt{solve\_countdown} lance l'exploration et retourne la solution
+	      ainsi que le nombre d'\'{e}tats visit\'{e}s.
+\end{itemize}
+
+\subsection{Complexit\'{e} th\'{e}orique}\label{subsec:tp2-complexite}
+
+S'il reste \(n\) plaques, le nombre de couples possibles vaut
+\(\binom{n}{2}\).
+Pour chaque couple, on teste au plus quatre op\'{e}rations.
+Le
+facteur de branchement est donc major\'{e} par :
+
+\[
+	4 \times \binom{n}{2} = 2n(n-1)
+\]
+
+Si \(E(n)\) d\'{e}signe le nombre maximal d'ensembles examin\'{e}s, on obtient :
+
+\[
+	E(1) = 1, \qquad E(n) = 1 + 2n(n-1)E(n-1)
+\]
+
+Pour \(n = 6\), cela conduit \`{a} :
+
+\[
+	E(6) = 3\,516\,061
+\]
+
+L'exploration exhaustive a donc une croissance tr\`{e}s rapide, que l'on peut
+qualifier de factorielle-exponentielle.
+
+\subsection{R\'{e}sultats exp\'{e}rimentaux}\label{subsec:tp2-resultats}
+
+La campagne de mesure a \'{e}t\'{e} r\'{e}alis\'{e}e avec
+\texttt{tp2/benchmark.py}, sur \(25\) parties al\'{e}atoires par taille,
+avec une graine fixe \texttt{123}.
+Pour chaque taille \(n \in \{2,3,4,5,6\}\),
+le programme mesure le temps de r\'{e}solution, le nombre d'\'{e}tats explor\'{e}s et
+le taux de succ\`{e}s.
+
+Les valeurs les plus importantes obtenues sont les suivantes :
+
+\begin{itemize}
+	\item pour \(n = 2\), le solveur visite en moyenne \(4.44\) \'{e}tats et ne
+	      trouve aucune solution exacte sur l'\'{e}chantillon ;
+	\item pour \(n = 5\), il visite en moyenne \(21\,095.20\) \'{e}tats ;
+	\item pour \(n = 6\), il visite en moyenne \(198\,380.08\) \'{e}tats avec un
+	      taux de succ\`{e}s de \(96\%\).
+\end{itemize}
+
+On observe \'{e}galement un \'{e}cart notable entre temps moyen et temps m\'{e}dian
+sur \(n = 6\) : certains tirages sont r\'{e}solus tr\`{e}s vite, tandis que d'autres
+n\'{e}cessitent une exploration beaucoup plus profonde.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{tp2_time}
+	\caption{Temps moyen de r\'{e}solution en fonction du nombre de plaques.}\label{fig:tp2_time}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{tp2_states}
+	\caption{Nombre moyen d'\'{e}tats explor\'{e}s en fonction de \(n\), compar\'{e}
+	\`{a} une tendance de pire cas.}\label{fig:tp2_states}
+\end{figure}
+
+Les mesures pratiques sont coh\'{e}rentes avec la th\'{e}orie : la difficult\'{e}
+augmente brutalement lorsque le nombre de plaques cro\^{\i}t.
+
+\subsection{Exemple de solution reconstruite}\label{subsec:tp2-exemple}
+
+Pour la cible \(120\) et les plaques \((2, 10, 100)\), le solveur retrouve bien
+une solution conforme \`{a} l'\'{e}nonc\'{e} :
+
+\[
+	100 + (2 \times 10) = 120
+\]
+
+Cette reconstruction est fournie directement par le programme.
+
+\subsection{Question bonus : NP-compl\'{e}tude}\label{subsec:tp2-bonus}
+
+Il faut distinguer le jeu t\'{e}l\'{e}vis\'{e} born\'{e} et une version g\'{e}n\'{e}ralis\'{e}e du
+probl\`{e}me.
+
+\paragraph{Version born\'{e}e du jeu.}
+Dans le cadre du TP, le nombre de plaques est fix\'{e} \`{a} \(6\), le jeu de
+plaques possibles est fini, et la cible est born\'{e} entre \(100\) et \(999\).
+Il ne s'agit donc pas d'une famille d'instances asymptotique ; on ne parle pas
+de NP-compl\'{e}tude au sens strict.
+
+\paragraph{Version g\'{e}n\'{e}ralis\'{e}e.}
+Si l'on autorise un nombre variable de plaques et des entr\'{e}es quelconques,
+alors le probl\`{e}me d\'{e}cision \og{} la cible est-elle atteignable ? \fg{} est un
+bon candidat \`{a} la NP-compl\'{e}tude.
+
+\begin{itemize}
+	\item il appartient \`{a} NP, car une expression candidate se v\'{e}rifie en
+	      temps polynomial ;
+	\item il est NP-difficile par r\'{e}duction de \textsc{Subset Sum} en ne
+	      conservant que l'op\'{e}ration \(+\).
+\end{itemize}
+
+On en d\'{e}duit que la version g\'{e}n\'{e}ralis\'{e}e d\'{e}cisionnelle est
+NP-compl\`{e}te, tandis que l'instance born\'{e}e du TP reste r\'{e}soluble par
+exploration exhaustive.
+
+\subsection{Bilan du TP2}\label{subsec:tp2-bilan}
+
+Le TP2 met en \'{e}vidence la diff\'{e}rence entre un algorithme simple \`{a}
+formuler et un co\^{u}t d'exploration potentiellement tr\`{e}s \'{e}lev\'{e}.
+Les
+mesures confirment que le nombre d'\'{e}tats cro\^{\i}t tr\`{e}s vite, m\^{e}me avec un
+nombre de plaques tr\`{e}s faible.
+La reconstruction de l'expression finale permet
+cependant de conserver un r\'{e}sultat exploitable et lisible.

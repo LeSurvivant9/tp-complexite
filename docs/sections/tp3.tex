@@ -1,0 +1,178 @@
+\section{TP3 --- Algorithmes de tri}\label{sec:tp3}
+
+Ce troisi\`{e}me TP porte sur l'impl\'{e}mentation et la comparaison de quatre
+algorithmes de tri : tri par s\'{e}lection, tri par insertion, tri \`{a} bulles et
+tri fusion.
+Les fonctions sont regroup\'{e}es dans \texttt{tp3/sorting.py} et le
+script \texttt{tp3/benchmark.py} automatise les mesures et la g\'{e}n\'{e}ration des
+figures.
+
+\subsection{Algorithmes impl\'{e}ment\'{e}s}\label{subsec:tp3-algorithmes}
+
+Chaque fonction prend une liste d'entiers et retourne une nouvelle liste tri\'{e}e,
+ce qui simplifie les tests et \'{e}vite les effets de bord pendant les benchmarks.
+
+\subsubsection{Tri par s\'{e}lection}\label{subsubsec:tp3-selection}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri par s\'{e}lection},label={lst:tp3-selection}]
+selection_sort(tableau) :
+    pour i de 0 a n - 1 :
+        min <- indice du plus petit element entre i et n - 1
+        echanger tableau[i] et tableau[min]
+    retourner tableau trie
+\end{lstlisting}
+
+Le tri par s\'{e}lection effectue syst\'{e}matiquement un balayage complet de la
+partie non tri\'{e}e.
+Sa complexit\'{e} temporelle est en \(\mathcal{O}(n^2)\) dans
+le meilleur, le pire et le cas moyen.
+
+\subsubsection{Tri par insertion}\label{subsubsec:tp3-insertion}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri par insertion},label={lst:tp3-insertion}]
+insertion_sort(tableau) :
+    pour i de 1 a n - 1 :
+        courant <- tableau[i]
+        decaler vers la droite les elements plus grands
+        inserer courant a sa place
+    retourner tableau trie
+\end{lstlisting}
+
+Le tri par insertion a une complexit\'{e} moyenne et pire cas en
+\(\mathcal{O}(n^2)\), mais son meilleur cas est lin\'{e}aire
+\(\mathcal{O}(n)\) sur un tableau d\'{e}j\`{a} tri\'{e}.
+
+\subsubsection{Tri \`{a} bulles}\label{subsubsec:tp3-bulles}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri \`{a} bulles},label={lst:tp3-bulles}]
+bubble_sort(tableau) :
+    repeter :
+        echanger chaque paire voisine mal ordonnee
+    jusqu'a ce qu'aucun echange ne soit effectue
+    retourner tableau trie
+\end{lstlisting}
+
+Le tri \`{a} bulles est aussi quadratique en moyenne et dans le pire cas.
+Avec
+l'arr\^{e}t anticip\'{e} utilis\'{e} dans le code, le meilleur cas est lin\'{e}aire
+si le tableau est d\'{e}j\`{a} tri\'{e}.
+
+\subsubsection{Tri fusion}\label{subsubsec:tp3-fusion}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri fusion},label={lst:tp3-fusion}]
+merge_sort(tableau) :
+    si n < 2 :
+        retourner tableau
+    separer le tableau en deux moities
+    trier recursivement chaque moitie
+    fusionner les deux moities triees
+\end{lstlisting}
+
+Le tri fusion suit le sch\'{e}ma diviser pour r\'{e}gner.
+Sa complexit\'{e}
+temporelle est en \(\mathcal{O}(n \log n)\) dans les trois cas, au prix d'une
+m\'{e}moire auxiliaire suppl\'{e}mentaire en \(\mathcal{O}(n)\).
+
+\subsection{Complexit\'{e}s th\'{e}oriques}\label{subsec:tp3-complexites}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{lccc}
+		\toprule
+		Algorithme    & Meilleur cas              & Cas moyen                 & Pire cas                  \\
+		\midrule
+		S\'{e}lection & \(\mathcal{O}(n^2)\)      & \(\mathcal{O}(n^2)\)      & \(\mathcal{O}(n^2)\)      \\
+		Insertion     & \(\mathcal{O}(n)\)        & \(\mathcal{O}(n^2)\)      & \(\mathcal{O}(n^2)\)      \\
+		Bulles        & \(\mathcal{O}(n)\)        & \(\mathcal{O}(n^2)\)      & \(\mathcal{O}(n^2)\)      \\
+		Fusion        & \(\mathcal{O}(n \log n)\) & \(\mathcal{O}(n \log n)\) & \(\mathcal{O}(n \log n)\) \\
+		\bottomrule
+	\end{tabular}
+	\caption{Complexit\'{e}s temporelles des algorithmes de tri \'{e}tudi\'{e}s.}\label{tab:tp3-complexites}
+\end{table}
+
+\subsection{Choix des tailles de tableau}\label{subsec:tp3-tailles}
+
+Le sujet fixe une petite taille \`{a} \(10^3\) \'{e}l\'{e}ments.
+Dans le script de
+benchmark, cette valeur sert de r\'{e}f\'{e}rence pour calibrer automatiquement les
+deux autres tailles \`{a} partir du tri par insertion sur des tableaux al\'{e}atoires.
+
+Les tailles finalement retenues sur la machine de test sont :
+
+\begin{itemize}
+	\item petite taille : \(1000\) \'{e}l\'{e}ments ;
+	\item taille moyenne : \(4000\) \'{e}l\'{e}ments ;
+	\item grande taille : \(64000\) \'{e}l\'{e}ments.
+\end{itemize}
+
+La recherche proc\`{e}de par doublement successif.
+Les seuils demand\'{e}s ne sont
+donc pas atteints exactement, mais d\'{e}pass\'{e}s : le tri par insertion devient
+environ \(15.8\) fois plus lent entre \(1000\) et \(4000\), puis environ
+\(273\) fois plus lent entre \(4000\) et \(64000\).
+
+\subsection{Protocole exp\'{e}rimental}\label{subsec:tp3-protocole}
+
+Pour chaque taille, un tableau pseudo-al\'{e}atoire reproductible est g\'{e}n\'{e}r\'{e}
+avec la graine \texttt{123}.
+Les quatre algorithmes sont appliqu\'{e}s \`{a} ce m\^{e}me
+jeu de donn\'{e}es.
+Une seule mesure a \'{e}t\'{e} retenue par taille, car le co\^{u}t
+des tris quadratiques devient tr\`{e}s important sur la grande taille.
+
+Ce protocole correspond essentiellement \`{a} un cas moyen :
+les tableaux sont
+al\'{e}atoires et non d\'{e}j\`{a} tri\'{e}s ou tri\'{e}s en ordre inverse.
+
+\subsection{R\'{e}sultats num\'{e}riques}\label{subsec:tp3-resultats}
+
+Les temps obtenus sont r\'{e}sum\'{e}s ci-dessous :
+
+\begin{itemize}
+	\item pour \(n = 1000\), les tris quadratiques restent inf\'{e}rieurs \`{a}
+	      \(0.014\) seconde ;
+	\item pour \(n = 4000\), le tri fusion reste proche de \(3\) ms alors que les
+	      tris quadratiques approchent d\'{e}j\`{a} le dixi\`{e}me de seconde ;
+	\item pour \(n = 64000\), le tri fusion dure environ \(0.063\) seconde,
+	      contre \(24.07\) s pour l'insertion, \(25.03\) s pour la s\'{e}lection et
+	      \(63.35\) s pour le tri \`{a} bulles.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{tp3_time_compare}
+	\caption{Comparaison des temps d'ex\'{e}cution des quatre algorithmes de tri.}\label{fig:tp3_time_compare}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{tp3_insertion_reference}
+	\caption{Tailles de r\'{e}f\'{e}rence retenues \`{a} partir du tri par insertion.}\label{fig:tp3_insertion_reference}
+\end{figure}
+
+\subsection{Analyse des r\'{e}sultats}\label{subsec:tp3-analyse}
+
+Les courbes obtenues sont conformes aux complexit\'{e}s th\'{e}oriques :
+
+\begin{itemize}
+	\item le tri fusion domine nettement les autres algorithmes lorsque la taille
+	      augmente ;
+	\item les trois tris quadratiques deviennent rapidement tr\`{e}s co\^{u}teux ;
+	\item le tri \`{a} bulles est le plus lent en pratique sur les tableaux
+	      al\'{e}atoires utilis\'{e}s ;
+	\item les mesures correspondent au cas moyen, car les entr\'{e}es sont
+	      al\'{e}atoires.
+\end{itemize}
+
+Le meilleur cas des tris par insertion et \`{a} bulles ne se voit pas sur ces
+mesures, car il appara\^{\i}t surtout sur des tableaux d\'{e}j\`{a} tri\'{e}s.
+Le tri par
+s\'{e}lection, lui, reste quadratique m\^{e}me dans cette situation.
+
+\subsection{Bilan du TP3}\label{subsec:tp3-bilan}
+
+Le TP3 confirme de mani\`{e}re tr\`{e}s nette l'avantage des algorithmes en
+\(n \log n\) pour les tableaux de grande taille.
+Les tris simples restent utiles
+pour leur valeur p\'{e}dagogique et pour de petits jeux de donn\'{e}es, mais leur
+co\^{u}t quadratique les rend peu adapt\'{e}s \`{a} grande \'{e}chelle.

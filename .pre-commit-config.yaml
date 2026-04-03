@@ -1,4 +1,38 @@
 repos:
+  # General hooks (YAML, etc.)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  # Prettier for YAML formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        types: [yaml]
+        args: [--prose-wrap, never, --print-width, "1000"]
+  # LaTeX hooks
+  - repo: https://github.com/cmhughes/latexindent.pl
+    rev: V3.24.7
+    hooks:
+      - id: latexindent
+        files: ^docs/.*\.(tex|sty)$
+  - repo: https://github.com/meliache/pre-commit-chktex
+    rev: v0.2.2
+    hooks:
+      - id: chktex-system
+        args: [-l, docs/.chktexrc]
+        files: ^docs/.*\.(tex|sty)$
+  - repo: local
+    hooks:
+      - id: latex-build-check
+        name: Build LaTeX document
+        entry: ./scripts/check-latex.sh
+        language: system
+        pass_filenames: false
+        files: ^docs/.*\.(tex|sty)$
   # Ruff — lint + format (remplace isort, flake8, black)
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.5
@@ -6,7 +40,6 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
-
   # Mypy — type checking
   - repo: local
     hooks:

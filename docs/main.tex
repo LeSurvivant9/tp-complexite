@@ -1,29 +1,21 @@
 % !TEX program = lualatex
-\documentclass[12pt,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 
-\usepackage{fontspec}
-\usepackage[french]{babel}
-\usepackage{geometry}
-\usepackage{hyperref}
-\usepackage{graphicx}
-\usepackage{listings}
-\usepackage{amsmath,amssymb}
+\usepackage{mystyle}
 
-\geometry{margin=2.5cm}
-\graphicspath{{figures/}}
-
-\title{Compte rendu --- Complexité algorithmique}
-\author{}
-\date{\today}
+\input{metadata}
 
 \begin{document}
 
 \maketitle
+
 \tableofcontents
 \newpage
 
+\input{sections/introduction}
 \input{sections/tp1}
 \input{sections/tp2}
 \input{sections/tp3}
+\input{sections/conclusion}
 
 \end{document}

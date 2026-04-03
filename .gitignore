@@ -13,16 +13,23 @@ wheels/
 .idea/
 .vscode/
 
+# OS / local artifacts
+.DS_Store
+.coverage
+node_modules/
+*.bak*
+
 # Type checking / linting caches
 .mypy_cache/
 .ruff_cache/
 
 # LaTeX build artifacts
-docs/*.aux
-docs/*.log
-docs/*.out
-docs/*.toc
-docs/*.synctex.gz
-docs/*.fls
-docs/*.fdb_latexmk
-docs/*.pdf
+docs/**.aux
+docs/**.log
+docs/**.out
+docs/**.toc
+docs/**.synctex.gz
+docs/**.fls
+docs/**.fdb_latexmk
+docs/out/
+docs/sections/indent.log

@@ -13,6 +13,8 @@ dependencies = [
 dev = [
     "mypy>=1.19.1",
     "pre-commit>=4.5.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
     "ruff>=0.15.5",
 ]
 
@@ -46,3 +48,11 @@ python_version = "3.12"
 strict = true
 ignore_missing_imports = true
 exclude = ["docs/"]
+
+# ---------------------------------------------------------------------------
+# Pytest — tests + coverage
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--cov=tp1 --cov=tp2 --cov=tp3 --cov=utils --cov-report=term-missing"

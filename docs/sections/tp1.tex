@@ -1,0 +1,231 @@
+\section{TP1 --- Ordres de grandeur en complexit\'{e}}\label{sec:tp1}
+
+Ce premier TP a pour but d'illustrer plusieurs classes de complexit\'{e} \`{a}
+partir de trois probl\`{e}mes classiques : les Tours de Hano\"{\i}, le calcul de
+Fibonacci et le crible d'\'{E}ratosth\`{e}ne.
+Les mesures ont \'{e}t\'{e} r\'{e}alis\'{e}es
+avec le script \texttt{tp1/benchmark.py}.
+Chaque mesure correspond \`{a} la
+m\'{e}diane de trois ex\'{e}cutions.
+
+\subsection{Socle commun de mesure}\label{subsec:tp1-socle}
+
+Le code du TP1 reste volontairement simple :
+
+\begin{itemize}
+	\item chaque algorithme est plac\'{e} dans son propre module
+	      (\texttt{tp1/hanoi.py}, \texttt{tp1/fibonacci.py},
+	      \texttt{tp1/eratosthene.py}) ;
+	\item le module commun \texttt{utils/benchmarking.py} centralise la mesure
+	      des temps et la r\'{e}p\'{e}tition des essais ;
+	\item le script \texttt{tp1/benchmark.py} produit les tableaux num\'{e}riques
+	      et les figures int\'{e}gr\'{e}es au rapport.
+\end{itemize}
+
+\subsection{Tours de Hano\"{\i}}\label{subsec:tp1-hanoi}
+
+\subsubsection{Principe et pseudo-code}\label{subsubsec:tp1-hanoi-principe}
+
+Le probl\`{e}me consiste \`{a} d\'{e}placer \(n\) disques d'une tige source vers une
+tige cible en utilisant une tige auxiliaire, sans jamais poser un grand disque
+sur un plus petit.
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code des Tours de Hano\"{\i}},label={lst:tp1-hanoi-pseudocode}]
+hanoi(n, source, auxiliaire, cible) :
+    si n = 1 :
+        deplacer le disque de source vers cible
+        retourner
+
+    hanoi(n - 1, source, cible, auxiliaire)
+    deplacer le plus grand disque de source vers cible
+    hanoi(n - 1, auxiliaire, source, cible)
+\end{lstlisting}
+
+Dans le code, la fonction \texttt{hanoi} ex\'{e}cute l'algorithme, tandis que
+\texttt{hanoi\_call\_count} mesure le nombre exact d'appels r\'{e}cursifs.
+
+\subsubsection{Complexit\'{e} th\'{e}orique}\label{subsubsec:tp1-hanoi-complexite}
+
+Si \(T(n)\) d\'{e}signe le nombre d'appels r\'{e}cursifs, alors :
+
+\[
+	T(n) = 2T(n-1) + 1, \qquad T(1) = 1
+\]
+
+La solution ferm\'{e}e est :
+
+\[
+	T(n) = 2^n - 1
+\]
+
+La complexit\'{e} temporelle est donc exponentielle en
+\(\mathcal{O}(2^n)\).
+
+\subsubsection{R\'{e}sultats num\'{e}riques}\label{subsubsec:tp1-hanoi-resultats}
+
+Les mesures ont \'{e}t\'{e} effectu\'{e}es pour
+\(n \in \{1, 5, 10, 15, 20, 25, 30\}\).
+Le nombre d'appels observ\'{e} co\"{\i}ncide
+exactement avec la formule th\'{e}orique.
+En particulier, pour \(n = 30\), on
+obtient \(2^{30} - 1 = 1\,073\,741\,823\) appels et un temps mesur\'{e} de
+\(15.40\) secondes.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{hanoi_time}
+	\caption{Temps d'ex\'{e}cution de \texttt{hanoi\_call\_count} pour l'entr\'{e}e
+	\(n\).
+	La courbe suit une croissance exponentielle compatible avec
+	\(\mathcal{O}(2^n)\).}\label{fig:hanoi_time}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{hanoi_calls}
+	\caption{Comparaison entre les appels r\'{e}cursifs mesur\'{e}s et la formule
+	exacte \(2^n - 1\).}\label{fig:hanoi_calls}
+\end{figure}
+
+Les r\'{e}sultats pratiques confirment donc sans ambigu\"{\i}t\'{e} la complexit\'{e}
+th\'{e}orique.
+
+\subsection{Suite de Fibonacci}\label{subsec:tp1-fibonacci}
+
+On \'{e}tudie la suite d\'{e}finie par :
+
+\[
+	u_n =
+	\begin{cases}
+		1                 & \text{si } n = 0 \text{ ou } n = 1 \\
+		u_{n-1} + u_{n-2} & \text{si } n \geq 2
+	\end{cases}
+\]
+
+Les fonctions Python utilisent la convention usuelle
+\(F(0)=0\), \(F(1)=1\), sans impact sur la comparaison de complexit\'{e}.
+
+\subsubsection{Version it\'{e}rative}\label{subsubsec:tp1-fibonacci-iteratif}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code de Fibonacci it\'{e}ratif},label={lst:tp1-fibonacci-iteratif}]
+fib_iteratif(n) :
+    si n < 2 :
+        retourner n
+    precedent <- 0
+    courant <- 1
+    pour i de 2 a n :
+        precedent, courant <- courant, precedent + courant
+    retourner courant
+\end{lstlisting}
+
+Cette approche effectue \(n\) it\'{e}rations et a donc une complexit\'{e}
+temporelle en \(\mathcal{O}(n)\) et une m\'{e}moire suppl\'{e}mentaire constante.
+
+\subsubsection{Version r\'{e}cursive na\"{\i}ve}\label{subsubsec:tp1-fibonacci-recursif}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code de Fibonacci r\'{e}cursif},label={lst:tp1-fibonacci-recursif}]
+fib_recursif(n) :
+    si n < 2 :
+        retourner n
+    retourner fib_recursif(n - 1) + fib_recursif(n - 2)
+\end{lstlisting}
+
+Cette version suit directement la d\'{e}finition de la suite, mais recalcule de
+nombreux termes.
+Sa complexit\'{e} est exponentielle, classiquement not\'{e}e
+\(\mathcal{O}(\varphi^n)\), donc major\'{e}e par \(\mathcal{O}(2^n)\).
+
+\subsubsection{Version logarithmique par \emph{fast doubling}}\label{subsubsec:tp1-fibonacci-logarithmique}
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code de Fibonacci par fast doubling},label={lst:tp1-fibonacci-logarithmique}]
+fib_log(n) :
+    retourner pair(n).premier
+
+pair(n) :
+    si n = 0 :
+        retourner (0, 1)
+    a, b <- pair(n // 2)
+    c <- a * (2 * b - a)
+    d <- a * a + b * b
+    si n pair :
+        retourner (c, d)
+    retourner (d, c + d)
+\end{lstlisting}
+
+Comme l'indice est divis\'{e} par deux \`{a} chaque \'{e}tape, la complexit\'{e}
+temporelle devient logarithmique en \(\mathcal{O}(\log n)\).
+
+\subsubsection{R\'{e}sultats num\'{e}riques}\label{subsubsec:tp1-fibonacci-resultats}
+
+La comparaison sur de petites valeurs de \(n\) montre que la version r\'{e}cursive
+na\"{\i}ve devient rapidement co\^{u}teuse : pour \(n = 30\), elle met environ
+\(0.075\) seconde, contre moins d'une microseconde pour les versions it\'{e}rative
+et logarithmique.
+Sur les grandes valeurs, la version logarithmique reste la
+plus scalable.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{fibonacci_time_compare}
+	\caption{Comparaison des temps d'ex\'{e}cution des versions it\'{e}rative,
+	r\'{e}cursive na\"{\i}ve et logarithmique.}\label{fig:fibonacci_time_compare}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{fibonacci_time_scaling}
+	\caption{Comparaison des versions it\'{e}rative et logarithmique sur des
+	valeurs plus grandes de \(n\).}\label{fig:fibonacci_time_scaling}
+\end{figure}
+
+L'exp\'{e}rience confirme donc l'int\'{e}r\^{e}t de choisir un algorithme adapt\'{e} \`{a}
+la structure math\'{e}matique du probl\`{e}me.
+
+\subsection{Crible d'\'{E}ratosth\`{e}ne}\label{subsec:tp1-eratosthene}
+
+\subsubsection{Principe et pseudo-code}\label{subsubsec:tp1-eratosthene-principe}
+
+Le crible d'\'{E}ratosth\`{e}ne permet de calculer tous les nombres premiers
+inf\'{e}rieurs ou \'{e}gaux \`{a} une borne \(N\).
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du crible d'\'{E}ratosth\`{e}ne},label={lst:tp1-eratosthene}]
+crible(N) :
+    marquer 2..N comme potentiellement premiers
+    pour p de 2 a racine(N) :
+        si p est encore premier :
+            barrer tous les multiples de p a partir de p * p
+    retourner les valeurs non barrees
+\end{lstlisting}
+
+L'impl\'{e}mentation repose sur un tableau de bool\'{e}ens compact
+\texttt{bytearray}, ce qui suffit pour les bornes demand\'{e}es.
+
+\subsubsection{Complexit\'{e} th\'{e}orique}\label{subsubsec:tp1-eratosthene-complexite}
+
+La complexit\'{e} temporelle classique du crible est
+\(\mathcal{O}(N \log \log N)\), avec une complexit\'{e} m\'{e}moire en
+\(\mathcal{O}(N)\).
+
+\subsubsection{R\'{e}sultats num\'{e}riques}\label{subsubsec:tp1-eratosthene-resultats}
+
+Les mesures ont \'{e}t\'{e} effectu\'{e}es jusqu'\`{a} \(N = 100\,000\).
+Pour cette
+borne, le script renvoie \(9592\) nombres premiers en environ \(1.5\) ms.
+La
+croissance reste tr\`{e}s mod\'{e}r\'{e}e \`{a} l'\'{e}chelle des tailles test\'{e}es.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{eratosthene_time}
+	\caption{Temps d'ex\'{e}cution du crible d'\'{E}ratosth\`{e}ne en fonction de
+	\(N\), avec une tendance compatible avec
+	\(\mathcal{O}(N \log \log N)\).}\label{fig:eratosthene_time}
+\end{figure}
+
+\subsection{Bilan du TP1}\label{subsec:tp1-bilan}
+
+Le TP1 met clairement en \'{e}vidence l'int\'{e}r\^{e}t de l'analyse de complexit\'{e}.
+Les mesures obtenues sont coh\'{e}rentes avec la th\'{e}orie : croissance
+exponentielle pour Hano\"{\i} et Fibonacci r\'{e}cursif na\"{\i}f, croissance
+lin\'{e}aire pour Fibonacci it\'{e}ratif, logarithmique pour le \emph{fast
+	doubling} et quasi lin\'{e}aire pour le crible d'\'{E}ratosth\`{e}ne.
