@@ -14,7 +14,7 @@ ce qui simplifie les tests et \'{e}vite les effets de bord pendant les benchmark
 
 \subsubsection{Tri par s\'{e}lection}\label{subsubsec:tp3-selection}
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri par s\'{e}lection},label={lst:tp3-selection}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp3-selection}]
 selection_sort(tableau) :
     pour i de 0 a n - 1 :
         min <- indice du plus petit element entre i et n - 1
@@ -29,7 +29,7 @@ le meilleur, le pire et le cas moyen.
 
 \subsubsection{Tri par insertion}\label{subsubsec:tp3-insertion}
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri par insertion},label={lst:tp3-insertion}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp3-insertion}]
 insertion_sort(tableau) :
     pour i de 1 a n - 1 :
         courant <- tableau[i]
@@ -44,7 +44,7 @@ Le tri par insertion a une complexit\'{e} moyenne et pire cas en
 
 \subsubsection{Tri \`{a} bulles}\label{subsubsec:tp3-bulles}
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri \`{a} bulles},label={lst:tp3-bulles}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp3-bulles}]
 bubble_sort(tableau) :
     repeter :
         echanger chaque paire voisine mal ordonnee
@@ -59,7 +59,7 @@ si le tableau est d\'{e}j\`{a} tri\'{e}.
 
 \subsubsection{Tri fusion}\label{subsubsec:tp3-fusion}
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du tri fusion},label={lst:tp3-fusion}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp3-fusion}]
 merge_sort(tableau) :
     si n < 2 :
         retourner tableau

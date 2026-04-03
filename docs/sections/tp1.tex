@@ -30,7 +30,7 @@ Le probl\`{e}me consiste \`{a} d\'{e}placer \(n\) disques d'une tige source vers
 tige cible en utilisant une tige auxiliaire, sans jamais poser un grand disque
 sur un plus petit.
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code des Tours de Hano\"{\i}},label={lst:tp1-hanoi-pseudocode}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp1-hanoi-pseudocode}]
 hanoi(n, source, auxiliaire, cible) :
     si n = 1 :
         deplacer le disque de source vers cible
@@ -107,7 +107,7 @@ Les fonctions Python utilisent la convention usuelle
 
 \subsubsection{Version it\'{e}rative}\label{subsubsec:tp1-fibonacci-iteratif}
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code de Fibonacci it\'{e}ratif},label={lst:tp1-fibonacci-iteratif}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp1-fibonacci-iteratif}]
 fib_iteratif(n) :
     si n < 2 :
         retourner n
@@ -123,7 +123,7 @@ temporelle en \(\mathcal{O}(n)\) et une m\'{e}moire suppl\'{e}mentaire constante
 
 \subsubsection{Version r\'{e}cursive na\"{\i}ve}\label{subsubsec:tp1-fibonacci-recursif}
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code de Fibonacci r\'{e}cursif},label={lst:tp1-fibonacci-recursif}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp1-fibonacci-recursif}]
 fib_recursif(n) :
     si n < 2 :
         retourner n
@@ -137,7 +137,7 @@ Sa complexit\'{e} est exponentielle, classiquement not\'{e}e
 
 \subsubsection{Version logarithmique par \emph{fast doubling}}\label{subsubsec:tp1-fibonacci-logarithmique}
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code de Fibonacci par fast doubling},label={lst:tp1-fibonacci-logarithmique}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp1-fibonacci-logarithmique}]
 fib_log(n) :
     retourner pair(n).premier
 
@@ -188,7 +188,7 @@ la structure math\'{e}matique du probl\`{e}me.
 Le crible d'\'{E}ratosth\`{e}ne permet de calculer tous les nombres premiers
 inf\'{e}rieurs ou \'{e}gaux \`{a} une borne \(N\).
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={Pseudo-code du crible d'\'{E}ratosth\`{e}ne},label={lst:tp1-eratosthene}]
+\begin{lstlisting}[basicstyle=\ttfamily,label={lst:tp1-eratosthene}]
 crible(N) :
     marquer 2..N comme potentiellement premiers
     pour p de 2 a racine(N) :
